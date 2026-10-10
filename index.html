@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff0f5">
+  <title>Một điều muốn nói với em ❤️</title>
+  <style>
+    :root { --pink:#e96d98; --deep:#9d3e65; --paper:#fffafc; }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; min-height:100vh; overflow-x:hidden;
+      display:flex; align-items:center; justify-content:center;
+      padding:24px 16px; color:#65384a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #fff 0%, #fff0f5 52%, #ffe2ec 100%);
+    }
+    .card {
+      width:min(100%, 460px); text-align:center; position:relative; z-index:2;
+      padding:30px 23px 32px; border:1px solid rgba(233,109,152,.24);
+      border-radius:26px; background:rgba(255,255,255,.82);
+      box-shadow:0 18px 60px rgba(157,62,101,.13);
+    }
+    .eyebrow { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:#c16b8b; }
+    h1 { margin:12px 0 8px; font-family:Georgia,serif; font-weight:500; font-size:clamp(27px,7vw,36px); color:var(--deep); }
+    .subtitle { color:#a36a80; font-size:14px; line-height:1.6; }
+    .envelope-wrap { height:220px; display:flex; align-items:center; justify-content:center; perspective:900px; }
+    .envelope {
+      width:220px; height:142px; position:relative; cursor:pointer; border:0; background:transparent;
+      filter:drop-shadow(0 12px 12px rgba(157,62,101,.14)); transition:transform .3s ease;
+    }
+    .envelope:hover { transform:translateY(-4px); }
+    .env-back { position:absolute; inset:0; background:#f5a9c3; border-radius:8px; }
+    .letter {
+      position:absolute; width:82%; height:86%; left:9%; top:3%; border-radius:5px;
+      background:#fffdfd; display:flex; align-items:center; justify-content:center;
+      font-size:34px; transition:transform .8s ease; z-index:2; box-shadow:0 2px 6px #cf6c9022;
+    }
+    .env-front {
+      position:absolute; inset:0; z-index:3;
+      background:linear-gradient(145deg, transparent 49.5%, #ee8eae 50%), 
+                 linear-gradient(215deg, transparent 49.5%, #f4a2bd 50%);
+      border-radius:0 0 8px 8px;
+    }
+    .flap {
+      position:absolute; left:0; top:0; width:0; height:0; z-index:4;
+      border-left:110px solid transparent; border-right:110px solid transparent;
+      border-top:83px solid #f8bfd1; transform-origin:top; transition:transform .6s ease;
+    }
+    .seal {
+      position:absolute; z-index:5; left:calc(50% - 19px); top:65px; width:38px; height:38px;
+      display:grid; place-items:center; border-radius:50%; color:white; font-size:19px;
+      background:#d94f82; box-shadow:0 3px 8px #9d3e6533; transition:opacity .3s ease;
+    }
+    .envelope.open .flap { transform:rotateX(180deg); z-index:1; }
+    .envelope.open .letter { transform:translateY(-82px); }
+    .envelope.open .seal { opacity:0; }
+    .hint { font-size:13px; color:#b36b87; margin-top:-4px; }
+    .letter-content { display:none; text-align:left; line-height:1.9; font-size:16px; margin-top:20px; }
+    .letter-content.show { display:block; animation:fadein .8s ease both; }
+    .line { opacity:0; transform:translateY(8px); animation:reveal .8s ease forwards; margin:0 0 13px; }
+    .final { text-align:center; font-family:Georgia,serif; font-size:23px; line-height:1.55; color:var(--deep); margin-top:22px; }
+    .signature { text-align:right; color:#b05e7e; font-style:italic; margin-top:16px; }
+    .restart { display:none; margin:18px auto 0; border:1px solid #edb1c6; color:#a2476d; background:#fff5f8; border-radius:999px; padding:10px 16px; cursor:pointer; }
+    .restart.show { display:inline-block; }
+    .heart { position:fixed; bottom:-30px; z-index:1; pointer-events:none; animation:floatUp linear forwards; opacity:.75; }
+    @keyframes reveal { to { opacity:1; transform:translateY(0); } }
+    @keyframes fadein { from {opacity:0} to {opacity:1} }
+    @keyframes floatUp { to { transform:translateY(-115vh) rotate(25deg); opacity:0; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="eyebrow">A little secret for you</div>
+    <h1>Gửi em ❤️</h1>
+    <div class="subtitle">Có một điều anh muốn nói với em.<br>Em mở lá thư này nhé?</div>
+
+    <div class="envelope-wrap" id="envelopeWrap">
+      <button class="envelope" id="envelope" aria-label="Mở lá thư">
+        <div class="env-back"></div>
+        <div class="letter">💌</div>
+        <div class="env-front"></div>
+        <div class="flap"></div>
+        <div class="seal">♥</div>
+      </button>
+    </div>
+    <div class="hint" id="hint">Chạm vào phong bì để mở thư</div>
+
+    <section class="letter-content" id="letterContent" aria-live="polite">
+      <p class="line" style="animation-delay:.3s">Thật ra anh đã nghĩ khá lâu mới quyết định viết những dòng này cho em.</p>
+      <p class="line" style="animation-delay:2s">Anh thích những lần mình trò chuyện, thích cảm giác muốn kể em nghe vài chuyện nhỏ trong ngày, và cả việc đôi khi chỉ một tin nhắn của em cũng khiến anh vui hơn một chút.</p>
+      <p class="line" style="animation-delay:5.1s">Anh không dám hứa những điều quá lớn lao. Anh chỉ muốn chân thành tìm hiểu em, quan tâm em bằng những điều giản dị và cùng nhau tạo nên nhiều kỷ niệm đẹp.</p>
+      <p class="line" style="animation-delay:8.2s">Vậy nên hôm nay, anh muốn nói rõ một điều…</p>
+      <p class="line final" style="animation-delay:10.4s">Anh thích em. 💗<br>Em có muốn cho anh cơ hội được ở bên cạnh em không?</p>
+      <p class="line signature" style="animation-delay:12.8s">— Từ một người đang thật lòng với em</p>
+    </section>
+    <button class="restart" id="restart">Đọc lại lá thư 💌</button>
+  </main>
+  <script>
+    const envelope = document.getElementById('envelope');
+    const content = document.getElementById('letterContent');
+    const hint = document.getElementById('hint');
+    const wrap = document.getElementById('envelopeWrap');
+    const restart = document.getElementById('restart');
+    let opened = false, heartTimer;
+    function floatHeart() {
+      const heart = document.createElement('span');
+      heart.className = 'heart';
+      heart.textContent = ['♥','♡','💗','💕'][Math.floor(Math.random()*4)];
+      heart.style.left = (Math.random()*94+3)+'vw';
+      heart.style.fontSize = (14+Math.random()*18)+'px';
+      heart.style.color = ['#e96d98','#d95c89','#f3a1bd'][Math.floor(Math.random()*3)];
+      heart.style.animationDuration = (5+Math.random()*4)+'s';
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),9500);
+    }
+    envelope.addEventListener('click', () => {
+      if (opened) return;
+      opened = true;
+      envelope.classList.add('open');
+      hint.textContent = 'Một chút chân thành gửi đến em…';
+      setTimeout(() => {
+        wrap.style.display = 'none';
+        hint.style.display = 'none';
+        content.classList.add('show');
+        restart.classList.add('show');
+        content.querySelectorAll('.line').forEach(line => {
+          line.style.animationName = 'none';
+          void line.offsetWidth;
+          line.style.animationName = 'reveal';
+        });
+        heartTimer = setInterval(floatHeart, 700);
+        for(let i=0;i<7;i++) setTimeout(floatHeart, i*180);
+      }, 750);
+    });
+    restart.addEventListener('click', () => {
+      clearInterval(heartTimer);
+      opened = false;
+      content.classList.remove('show');
+      content.querySelectorAll('.line').forEach(line => line.style.opacity = '0');
+      wrap.style.display = 'flex';
+      hint.style.display = 'block';
+      hint.textContent = 'Chạm vào phong bì để mở thư';
+      envelope.classList.remove('open');
+      restart.classList.remove('show');
+    });
+  </script>
+</body>
+</html>
